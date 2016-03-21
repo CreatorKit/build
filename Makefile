@@ -17,6 +17,11 @@ openwrt/.config: openwrt/feeds.conf
 openwrt: openwrt/.config
 	$(MAKE) -C ../dist/openwrt
 
+.PHONY: clean_feeds
+clean_feeds:
+	cd ../dist/openwrt; \
+	rm -rf .config feeds.conf tmp/ feeds;
+
 # Building Contiki apps
 .PHONY: contiki
 contiki:
@@ -26,7 +31,7 @@ contiki:
 # Clean OpenWRT
 # Deletes contents of the directories /bin and /build_dir
 .PHONY: clean_openwrt
-clean_openwrt:
+clean_openwrt: clean_feeds
 	 $(MAKE) -C ../dist/openwrt clean
 
 #Clean Contiki
@@ -36,8 +41,3 @@ clean_contiki:
 	$(MAKE) -C ../packages/flow_button_sensor TARGET=mikro-e clean
 
 clean: clean_openwrt clean_contiki
-
-.PHONY: clean_feeds
-clean_feeds:
-	cd ../dist/openwrt; \
-	rm -rf .config feeds.conf tmp/ feeds;
