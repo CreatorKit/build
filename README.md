@@ -15,17 +15,13 @@ repo sync
 curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
 chmod a+x ~/bin/repo
 ```
-Also you should be having your GitHub userid and password saved in ~/.netrc to avoid typing them again and again, in the following format:
-```
-machine github.com login <your_userid> password <your_password>
-```
 - Now you have all the required repositories cloned inside you project directory my_creatorkit. Enter into build repository and start building:
 ```
 cd build
 ```
-Now you have multiple options for building things:
+There are multiple options for building things:
 
-(i) You could just build OpenWRT:
+(i) You could just build OpenWrt:
 ```
 make openwrt
 ```
@@ -37,14 +33,14 @@ make contiki
 ```
 make
 ```
-**NOTE:** OpenWRT downloads some packages from artifact server. Hence it would be better to keep its credentials too in ~/.netrc as:
+**NOTE:** OpenWrt downloads some packages from artifact server. Hence it would be better to keep its credentials too in ~/.netrc as:
 ```
 machine imgsysart01.hh.imgtec.org login <your_userid> password <your_password>
 ```
 
 #### Clean build
 Different options for cleaning build repositories are as follows:
-- Clean OpenWRT
+- Clean OpenWrt
 ```
 make clean_openwrt
 ```
