@@ -25,8 +25,8 @@ clean_feeds:
 # Building Contiki apps
 .PHONY: contiki
 contiki:
-	$(MAKE) -C ../packages/flow_led_actuator TARGET=mikro-e 
-	$(MAKE) -C ../packages/flow_button_sensor TARGET=mikro-e 
+	$(MAKE) -C ../packages/led-actuator TARGET=mikro-e
+	$(MAKE) -C ../packages/button-sensor TARGET=mikro-e
 
 # Clean OpenWRT
 # Deletes contents of the directories /bin and /build_dir
@@ -37,7 +37,7 @@ clean_openwrt: clean_feeds
 #Clean Contiki
 .PHONY: clean_contiki
 clean_contiki:
-	$(MAKE) -C ../packages/flow_led_actuator TARGET=mikro-e clean
-	$(MAKE) -C ../packages/flow_button_sensor TARGET=mikro-e clean
+	$(MAKE) -C ../packages/led-actuator TARGET=mikro-e clean
+	$(MAKE) -C ../packages/button-sensor TARGET=mikro-e clean
 
 clean: clean_openwrt clean_contiki
