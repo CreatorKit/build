@@ -3,49 +3,57 @@
 Creator-Kit requires multiple repositories for building, which are scattered across two GitHub organizations namely FlowM2M and CreatorKit.
 
 ### Steps for building CreatorKit project are as follows :-
-Create a directory where you want to keep your project repositories, and run following commands :-
+Create a directory to keep project repositories, and run following commands :-
 
-    mkdir my_creatorkit
-    cd my_creatorkit
-    repo init -u https://github.com/CreatorKit/manifest.git -b branch-name
-    repo sync
+    $ mkdir creatorkit
+    $ cd creatorkit
+    $ repo init -u https://github.com/CreatorKit/manifest.git
+    $ repo sync
 
 _Note :- repo is a tool which should be present on your system. If not then follow this :-_
 
-    curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
-    chmod a+x ~/bin/repo
+    $ curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
+    $ chmod a+x ~/bin/repo
 
-Now you have all the required repositories cloned inside you project directory my_creatorkit.
+Now required repositories are cloned inside the project directory creatorkit.
 
 Enter into build repository and start building :-
 
-    cd build
+    $ cd build
 
 There are multiple options for building things :-
 
-You could just build linux based applications using OpenWrt :-
+Linux based applications using OpenWrt can be built by :-
 
-    make openwrt
+    $ make openwrt
 
-You could just build Contiki based applications :-
+OpenWrt binaries can be found at :-
 
-    make contiki
+	creatorkit/dist/openwrt/bin/pistachio/
 
-Or you could build both :-
+Contiki based applications can be built by :-
 
-    make
+    $ make contiki
 
-To clean and rebuild just linux based applications using OpenWrt :-
+Contiki based application binaries can be found at :-
 
-    make clean_openwrt
-    make openwrt
+	creatorkit/packages/button-sensor/lwm2m-client-button-sensor.hex
+	creatorkit/packages/led-actuator/lwm2m-client-led-actuator.hex
+
+Linux and Contiki based applications can be built by :-
+
+    $ make
+
+For cleaning linux based applications :-
+
+    $ make clean_openwrt
 
 _Note :- This will also clean the feeds._
 
-For cleaning contiki based applications:-
+For cleaning Contiki based applications :-
 
-    make clean_contiki
+    $ make clean_contiki
 
-And there is one command to clean everything :-
+Linux and Contiki based applications can be cleaned by :-
 
-    make clean
+    $ make clean
