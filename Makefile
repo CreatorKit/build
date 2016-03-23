@@ -1,5 +1,5 @@
 
-all: openwrt contiki
+all: openwrt contiki copy_binaries
 	echo "Done!"
 
 # Building OpenWRT
@@ -17,27 +17,35 @@ openwrt/.config: openwrt/feeds.conf
 openwrt: openwrt/.config
 	$(MAKE) -C ../dist/openwrt
 
-.PHONY: clean_feeds
-clean_feeds:
-	cd ../dist/openwrt; \
-	rm -rf .config feeds.conf tmp/ feeds;
-
 # Building Contiki apps
 .PHONY: contiki
 contiki:
 	$(MAKE) -C ../packages/led-actuator TARGET=mikro-e
 	$(MAKE) -C ../packages/button-sensor TARGET=mikro-e
 
+.PHONY: copy_binaries
+copy_binaries:
+	mkdir -p output/contiki
+	cp ../packages/led-actuator/lwm2m-client-led-actuator.hex output/contiki/
+	cp ../packages/button-sensor/lwm2m-client-button-sensor.hex output/contiki/
+	mkdir -p output/openwrt
+	find ../dist/openwrt/bin/pistachio/ -maxdepth 1 -type f -exec cp {} output/openwrt/ \;
+
 # Clean OpenWRT
 # Deletes contents of the directories /bin and /build_dir
 .PHONY: clean_openwrt
 clean_openwrt:
-	 $(MAKE) -C ../dist/openwrt clean
+	$(MAKE) -C ../dist/openwrt clean
 
-#Clean Contiki
+# Clean Contiki
 .PHONY: clean_contiki
 clean_contiki:
 	$(MAKE) -C ../packages/led-actuator TARGET=mikro-e clean
 	$(MAKE) -C ../packages/button-sensor TARGET=mikro-e clean
+
+.PHONY: clean_feeds
+clean_feeds:
+	cd ../dist/openwrt; \
+	rm -rf .config feeds.conf tmp/ feeds;
 
 clean: clean_openwrt clean_feeds clean_contiki

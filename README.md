@@ -29,7 +29,7 @@ Linux based applications using OpenWrt can be built by :-
 
 OpenWrt binaries can be found at :-
 
-	creatorkit/dist/openwrt/bin/pistachio/
+	creatorkit/build/output/openwrt/
 
 Contiki based applications can be built by :-
 
@@ -37,8 +37,7 @@ Contiki based applications can be built by :-
 
 Contiki based application binaries can be found at :-
 
-	creatorkit/packages/button-sensor/lwm2m-client-button-sensor.hex
-	creatorkit/packages/led-actuator/lwm2m-client-led-actuator.hex
+	creatorkit/build/output/contiki/
 
 Linux and Contiki based applications can be built by :-
 
