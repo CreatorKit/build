@@ -31,7 +31,7 @@ contiki:
 # Clean OpenWRT
 # Deletes contents of the directories /bin and /build_dir
 .PHONY: clean_openwrt
-clean_openwrt: clean_feeds
+clean_openwrt:
 	 $(MAKE) -C ../dist/openwrt clean
 
 #Clean Contiki
@@ -40,4 +40,4 @@ clean_contiki:
 	$(MAKE) -C ../packages/led-actuator TARGET=mikro-e clean
 	$(MAKE) -C ../packages/button-sensor TARGET=mikro-e clean
 
-clean: clean_openwrt clean_contiki
+clean: clean_openwrt clean_feeds clean_contiki
