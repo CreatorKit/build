@@ -7,7 +7,7 @@ Create a directory to keep project repositories, and run following commands :-
 
     $ mkdir creatorkit
     $ cd creatorkit
-    $ repo init -u https://github.com/CreatorKit/manifest.git
+    $ repo init -u https://github.com/CreatorKit/manifest.git -b dev
     $ repo sync
 
 _Note :- repo is a tool which should be present on your system. If not then follow this :-_
