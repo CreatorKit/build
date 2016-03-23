@@ -12,8 +12,13 @@ Create a directory to keep project repositories, and run following commands :-
 
 _Note :- repo is a tool which should be present on your system. If not then follow this :-_
 
+    $ mkdir -p ~/bin
     $ curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
     $ chmod a+x ~/bin/repo
+
+Update ~/.bashrc to add repo path in linux path permanently :-
+
+    export PATH=$PATH:~/bin/repo
 
 Now required repositories are cloned inside the project directory creatorkit.
 
@@ -29,7 +34,7 @@ Linux based applications using OpenWrt can be built by :-
 
 OpenWrt binaries can be found at :-
 
-	creatorkit/build/output/openwrt/
+    creatorkit/build/output/openwrt/
 
 Contiki based applications can be built by :-
 
@@ -37,7 +42,7 @@ Contiki based applications can be built by :-
 
 Contiki based application binaries can be found at :-
 
-	creatorkit/build/output/contiki/
+    creatorkit/build/output/contiki/
 
 Linux and Contiki based applications can be built by :-
 
