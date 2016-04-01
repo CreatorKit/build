@@ -18,7 +18,7 @@ _Note :- repo is a tool which should be present on your system. If not then foll
 
 Update ~/.bashrc to add repo path in linux path permanently :-
 
-    export PATH=$PATH:~/bin/repo
+    export PATH=$PATH:~/bin/
 
 Now required repositories are cloned inside the project directory creatorkit.
 
