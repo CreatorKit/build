@@ -15,7 +15,7 @@ openwrt/.config: openwrt/feeds.conf
 
 .PHONY: openwrt
 openwrt: openwrt/.config
-	$(MAKE) $(SUBMAKEFLAGS) -C ../dist/openwrt
+	$(MAKE) $(SUBMAKEFLAGS) -C ../dist/openwrt -j$(J)
 
 # Building Contiki apps
 .PHONY: contiki
