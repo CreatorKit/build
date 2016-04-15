@@ -15,7 +15,11 @@ openwrt/.config: openwrt/feeds.conf
 
 .PHONY: openwrt
 openwrt: openwrt/.config
-	$(MAKE) $(SUBMAKEFLAGS) -C ../dist/openwrt -j$(J)
+	if test $(findstring J=,$(MAKEFLAGS)); then \
+		$(MAKE) $(SUBMAKEFLAGS) -C ../dist/openwrt -j$(J); \
+	else \
+		$(MAKE) $(SUBMAKEFLAGS) -C ../dist/openwrt; \
+	fi;
 
 # Building Contiki apps
 .PHONY: contiki
