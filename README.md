@@ -48,6 +48,20 @@ Linux and Contiki based applications can be built by :-
 
     $ make
 
+Additional arguments could also be passed while building OpenWrt for logging more information, or building it in parallel threads. e.g.
+
+1. For logging all information
+
+        $ make openwrt V=s
+
+2. For logging just errors/warnings
+
+        $ make openwrt V=w
+
+3. For building OpenWrt in parallel threads
+
+        $ make openwrt J=20
+
 For cleaning linux based applications :-
 
     $ make clean_openwrt
