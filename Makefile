@@ -1,6 +1,13 @@
+all: openwrt contiki
+	echo "All Done!"
 
-all: openwrt contiki copy_binaries
-	echo "Done!"
+contiki: build_contiki copy_contiki
+	echo "Contiki Done!"
+
+openwrt: build_openwrt copy_openwrt
+	echo "OpenWrt Done!"
+
+clean: clean_openwrt clean_feeds clean_contiki
 
 # Building OpenWRT
 openwrt/feeds.conf:
@@ -13,8 +20,8 @@ openwrt/.config: openwrt/feeds.conf
 	cat creator-kit.config > ../dist/openwrt/.config
 	$(MAKE) -C ../dist/openwrt defconfig
 
-.PHONY: openwrt
-openwrt: openwrt/.config
+.PHONY: build_openwrt
+build_openwrt: openwrt/.config
 	if test $(findstring J=,$(MAKEFLAGS)); then \
 		$(MAKE) $(SUBMAKEFLAGS) -C ../dist/openwrt -j$(J); \
 	else \
@@ -22,16 +29,18 @@ openwrt: openwrt/.config
 	fi;
 
 # Building Contiki apps
-.PHONY: contiki
-contiki:
+.PHONY: build_contiki
+build_contiki:
 	$(MAKE) -C ../packages/led-actuator TARGET=mikro-e
 	$(MAKE) -C ../packages/button-sensor TARGET=mikro-e
 
-.PHONY: copy_binaries
-copy_binaries:
+# Copy files to build/output/
+copy_contiki:
 	mkdir -p output/contiki
 	cp ../packages/led-actuator/lwm2m-client-led-actuator.hex output/contiki/
 	cp ../packages/button-sensor/lwm2m-client-button-sensor.hex output/contiki/
+
+copy_openwrt:
 	mkdir -p output/openwrt
 	find ../dist/openwrt/bin/pistachio/ -maxdepth 1 -type f -exec cp {} output/openwrt/ \;
 
@@ -52,4 +61,8 @@ clean_feeds:
 	cd ../dist/openwrt; \
 	rm -rf .config feeds.conf tmp/ feeds;
 
-clean: clean_openwrt clean_feeds clean_contiki
+clear_output:
+	rm -rf output/
+
+.PHONY: clean_binaries
+clean_binaries: clear_output copy_openwrt copy_contiki
