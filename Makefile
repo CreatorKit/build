@@ -61,8 +61,8 @@ clean_feeds:
 	cd ../dist/openwrt; \
 	rm -rf .config feeds.conf tmp/ feeds;
 
-clear_output:
+clean_output:
 	rm -rf output/
 
 .PHONY: clean_binaries
-clean_binaries: clear_output copy_openwrt copy_contiki
+clean_binaries: clean_output copy_openwrt copy_contiki
