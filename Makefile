@@ -33,6 +33,7 @@ copy_binaries:
 	cp ../packages/led-actuator/lwm2m-client-led-actuator.hex output/contiki/
 	cp ../packages/button-sensor/lwm2m-client-button-sensor.hex output/contiki/
 	mkdir -p output/openwrt
+	zip -r output/openwrt/packages.zip ../dist/openwrt/bin/pistachio/packages/*
 	find ../dist/openwrt/bin/pistachio/ -maxdepth 1 -type f -exec cp {} output/openwrt/ \;
 
 # Clean OpenWRT
