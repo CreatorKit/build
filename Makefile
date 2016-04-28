@@ -7,7 +7,7 @@ contiki: build_contiki copy_contiki
 openwrt: build_openwrt copy_openwrt
 	echo "OpenWrt Done!"
 
-clean: clean_openwrt clean_feeds clean_contiki
+clean: clean_openwrt clean_feeds clean_contiki clean_binaries
 
 # Building OpenWRT
 openwrt/feeds.conf:
@@ -61,8 +61,6 @@ clean_feeds:
 	cd ../dist/openwrt; \
 	rm -rf .config feeds.conf tmp/ feeds;
 
-clean_output:
-	rm -rf output/
-
 .PHONY: clean_binaries
-clean_binaries: clean_output copy_openwrt copy_contiki
+clean_binaries:
+	rm -rf output/
