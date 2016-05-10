@@ -17,13 +17,19 @@ openwrt/feeds.conf:
 	./scripts/feeds install -a;
 
 openwrt/.config: openwrt/feeds.conf
+ifeq ($(build-all),1)
+	cat creator-kit-all.config > ../dist/openwrt/.config
+else
 	cat creator-kit.config > ../dist/openwrt/.config
+endif
 	$(MAKE) -C ../dist/openwrt defconfig
 
 .PHONY: build_openwrt
 build_openwrt: openwrt/.config
-	if test $(findstring J=,$(MAKEFLAGS)); then \
-		$(MAKE) $(SUBMAKEFLAGS) -C ../dist/openwrt -j$(J); \
+	if test $(findstring build-all=,$(MAKEFLAGS)); then \
+		$(MAKE) $(SUBMAKEFLAGS) -C ../dist/openwrt IGNORE_ERRORS=1; \
+	elif test $(findstring J=,$(MAKEFLAGS)); then \
+		$(MAKE) $(SUBMAKEFLAGS) -C ../dist/openwrt -j$(J);\
 	else \
 		$(MAKE) $(SUBMAKEFLAGS) -C ../dist/openwrt; \
 	fi;
