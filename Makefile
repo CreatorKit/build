@@ -19,6 +19,7 @@ openwrt/feeds.conf:
 openwrt/.config: openwrt/feeds.conf
 ifeq ($(build-all),1)
 	cat creator-kit-all.config > ../dist/openwrt/.config
+	cp config-4.1-all ../dist/openwrt/target/linux/pistachio/config-4.1
 else
 	cat creator-kit.config > ../dist/openwrt/.config
 endif
