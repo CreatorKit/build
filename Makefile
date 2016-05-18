@@ -14,7 +14,8 @@ openwrt/feeds.conf:
 	cd ../dist/openwrt; \
 	cp ../../build/feeds.conf .; \
 	./scripts/feeds update -a; \
-	./scripts/feeds install -a;
+	./scripts/feeds install -a; \
+	cd feeds/packages; patch -p1 < ../../../../build/0001-glib2-make-libiconv-dependent-on-ICONV_FULL-variable.patch;
 
 openwrt/.config: openwrt/feeds.conf
 ifeq ($(build-all),1)
