@@ -20,8 +20,11 @@ openwrt/.config: openwrt/feeds.conf
 	cat creator-kit.config > ../dist/openwrt/.config
 	$(MAKE) -C ../dist/openwrt defconfig
 
+openwrt/version:
+	./getver.sh ../dist/openwrt > ../dist/openwrt/version
+
 .PHONY: build_openwrt
-build_openwrt: openwrt/.config
+build_openwrt: openwrt/.config openwrt/version
 	if test $(findstring J=,$(MAKEFLAGS)); then \
 		$(MAKE) $(SUBMAKEFLAGS) -C ../dist/openwrt -j$(J); \
 	else \
