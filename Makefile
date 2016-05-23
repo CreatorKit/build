@@ -26,8 +26,11 @@ else
 endif
 	$(MAKE) -C ../dist/openwrt defconfig
 
+openwrt/version:
+	./getver.sh ../dist/openwrt > ../dist/openwrt/version
+
 .PHONY: build_openwrt
-build_openwrt: openwrt/.config
+build_openwrt: openwrt/.config openwrt/version
 	if test $(findstring build-all=,$(MAKEFLAGS)); then \
 		$(MAKE) $(SUBMAKEFLAGS) -C ../dist/openwrt IGNORE_ERRORS=1; \
 	elif test $(findstring J=,$(MAKEFLAGS)); then \
