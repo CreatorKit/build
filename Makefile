@@ -17,7 +17,11 @@ openwrt/feeds.conf:
 	./scripts/feeds install -a;
 
 openwrt/.config: openwrt/feeds.conf
-	cat creator-kit.config > ../dist/openwrt/.config
+	if test $(findstring P=,$(MAKEFLAGS)) && test -f $P; then \
+		cat $P > ../dist/openwrt/.config; \
+	else \
+		cat creator-kit.config > ../dist/openwrt/.config; \
+	fi
 	$(MAKE) -C ../dist/openwrt defconfig
 
 openwrt/version:
