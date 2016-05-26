@@ -32,7 +32,8 @@ openwrt/version:
 .PHONY: build_openwrt
 build_openwrt: openwrt/.config openwrt/version
 	if test $(findstring build-all=,$(MAKEFLAGS)); then \
-		$(MAKE) $(SUBMAKEFLAGS) -C ../dist/openwrt IGNORE_ERRORS=m; \
+		(cd ../dist/openwrt; find package/ -name Makefile -follow | sed "s|Makefile||g" | xargs -I {} make {}download V=s); \
+		$(MAKE) $(SUBMAKEFLAGS) -C ../dist/openwrt IGNORE_ERRORS=1 V=s 2>&1 | tee build-all.log | grep -i error; \
 	elif test $(findstring J=,$(MAKEFLAGS)); then \
 		$(MAKE) $(SUBMAKEFLAGS) -C ../dist/openwrt -j$(J);\
 	else \
