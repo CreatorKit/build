@@ -10,6 +10,10 @@ Create a directory to keep project repositories, and run following commands :-
     $ repo init -u https://github.com/CreatorKit/manifest.git
     $ repo sync
 
+To build a tagged release, add tag name with repo init command as follows :-
+
+     $ repo init -u https://github.com/CreatorKit/manifest.git -b 0.9.0
+
 _Note :- repo is a tool which should be present on your system. If not then follow this :-_
 
     $ mkdir -p ~/bin
