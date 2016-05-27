@@ -1,3 +1,4 @@
+J?=1
 all: openwrt contiki
 	echo "All Done!"
 
@@ -15,7 +16,9 @@ openwrt/feeds.conf:
 	cp ../../build/feeds.conf .; \
 	./scripts/feeds update -a; \
 	./scripts/feeds install -a; \
-	cd feeds/packages; patch -p1 < ../../../../build/0001-glib2-make-libiconv-dependent-on-ICONV_FULL-variable.patch;
+	cd feeds/packages; patch -p1 < ../../../../build/0001-glib2-make-libiconv-dependent-on-ICONV_FULL-variable.patch; \
+	patch -p1 < ../../../../build/0001-node-host-turn-off-verbose.patch;
+
 
 openwrt/.config: openwrt/feeds.conf
 ifeq ($(build-all),1)
@@ -32,11 +35,9 @@ openwrt/version:
 .PHONY: build_openwrt
 build_openwrt: openwrt/.config openwrt/version
 	if test $(findstring build-all=,$(MAKEFLAGS)); then \
-		$(MAKE) $(SUBMAKEFLAGS) -C ../dist/openwrt IGNORE_ERRORS=m; \
-	elif test $(findstring J=,$(MAKEFLAGS)); then \
-		$(MAKE) $(SUBMAKEFLAGS) -C ../dist/openwrt -j$(J);\
+		$(MAKE) $(SUBMAKEFLAGS) -C ../dist/openwrt IGNORE_ERRORS=m -j$(J); \
 	else \
-		$(MAKE) $(SUBMAKEFLAGS) -C ../dist/openwrt; \
+		$(MAKE) $(SUBMAKEFLAGS) -C ../dist/openwrt -j$(J);\
 	fi;
 
 # Building Contiki apps
