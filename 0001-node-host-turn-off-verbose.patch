@@ -1,13 +1,13 @@
 diff --git a/lang/node/Makefile b/lang/node/Makefile
-index 7effb08..ee3c0c9 100644
+index 7effb08..d3208b2 100644
 --- a/lang/node/Makefile
 +++ b/lang/node/Makefile
 @@ -65,6 +65,10 @@ HOST_CONFIGURE_ARGS:= \
 
  HOST_CONFIGURE_CMD:=python ./configure
 
-+define Build/Compile
-+    $(call Build/Compile/Default,all V=)
++define Host/Compile
++    $(call Host/Compile/Default,all V=)
 +endef
 +
  define Build/InstallDev
