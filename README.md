@@ -62,6 +62,10 @@ Additional arguments could also be passed while building OpenWrt for logging mor
 
         $ make openwrt J=20
 
+4. For building OpenWrt's different projects, different configs needs to be passed as (default is creator-kit.config)
+
+        $ make openwrt P=creator-kit-1.config
+
 For cleaning linux based applications :-
 
     $ make clean_openwrt
