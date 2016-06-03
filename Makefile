@@ -25,7 +25,11 @@ ifeq ($(build-all),1)
 	cat creator-kit-all.config > ../dist/openwrt/.config
 	cp config-4.1-all ../dist/openwrt/target/linux/pistachio/config-4.1
 else
-	cat creator-kit.config > ../dist/openwrt/.config
+	if test $(findstring P=,$(MAKEFLAGS)) && test -f $P; then \
+		cat $P > ../dist/openwrt/.config; \
+	else \
+		cat creator-kit.config > ../dist/openwrt/.config; \
+	fi
 endif
 	$(MAKE) -C ../dist/openwrt defconfig
 
