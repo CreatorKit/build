@@ -1,3 +1,4 @@
+J?=1
 all: openwrt contiki
 	echo "All Done!"
 
@@ -14,14 +15,22 @@ openwrt/feeds.conf:
 	cd ../dist/openwrt; \
 	cp ../../build/feeds.conf .; \
 	./scripts/feeds update -a; \
-	./scripts/feeds install -a;
+	./scripts/feeds install -a; \
+	cd feeds/packages; patch -p1 < ../../../../build/0001-glib2-make-libiconv-dependent-on-ICONV_FULL-variable.patch; \
+	patch -p1 < ../../../../build/0001-node-host-turn-off-verbose.patch;
+
 
 openwrt/.config: openwrt/feeds.conf
+ifeq ($(build-all),1)
+	cat creator-kit-all.config > ../dist/openwrt/.config
+	cp config-4.1-all ../dist/openwrt/target/linux/pistachio/config-4.1
+else
 	if test $(findstring P=,$(MAKEFLAGS)) && test -f $P; then \
 		cat $P > ../dist/openwrt/.config; \
 	else \
 		cat creator-kit.config > ../dist/openwrt/.config; \
 	fi
+endif
 	$(MAKE) -C ../dist/openwrt defconfig
 
 openwrt/version:
@@ -29,10 +38,10 @@ openwrt/version:
 
 .PHONY: build_openwrt
 build_openwrt: openwrt/.config openwrt/version
-	if test $(findstring J=,$(MAKEFLAGS)); then \
-		$(MAKE) $(SUBMAKEFLAGS) -C ../dist/openwrt -j$(J); \
+	if test $(findstring build-all=,$(MAKEFLAGS)); then \
+		$(MAKE) $(SUBMAKEFLAGS) -C ../dist/openwrt IGNORE_ERRORS=m -j$(J); \
 	else \
-		$(MAKE) $(SUBMAKEFLAGS) -C ../dist/openwrt; \
+		$(MAKE) $(SUBMAKEFLAGS) -C ../dist/openwrt -j$(J);\
 	fi;
 
 # Building Contiki apps
