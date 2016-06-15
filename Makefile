@@ -28,7 +28,7 @@ else
 	if test $(findstring P=,$(MAKEFLAGS)) && test -f $P; then \
 		cat $P > ../dist/openwrt/.config; \
 	else \
-		cat creator-kit.config > ../dist/openwrt/.config; \
+		cat creator-kit-0.config > ../dist/openwrt/.config; \
 	fi
 endif
 	$(MAKE) -C ../dist/openwrt defconfig
