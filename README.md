@@ -62,7 +62,7 @@ Additional arguments could also be passed while building OpenWrt for logging mor
 
         $ make openwrt J=20
 
-4. For building OpenWrt's different projects, different configs needs to be passed as (default is creator-kit-0.config)
+4. For building OpenWrt's different projects, different configs needs to be passed.
 
         $ make openwrt P=creator-kit-1.config
 
@@ -90,10 +90,10 @@ We are maintaining different pre-defined configurations in "config" files.
     creator-kit-0-cascoda.config - CreatorKit project0 related config for Cascoda CA8210 based platforms.
     creator-kit-1.config - CreatorKit project0 related config for CC2520 based platforms.
     creator-platform-all-cascoda.config - Basic Creator Platform profile enabling all the userspace and kernel space packages suitable for Cascoda CA8210 based platforms.
-    
+
 ## To build for cascoda CA8210 platform:
 
-Make sure you use "cascoda" related configs, else it will build for CC2520 by default.
+Make sure you use "cascoda" related configs, else it will build contiki for CC2520 by default.
 Contiki
 
     $ make contiki P=creator-kit-1-cascoda.config
@@ -107,3 +107,15 @@ Whole OpenWrt and Contiki based applications.
     $ make P=creator-kit-1-cascoda.config
 
 Rest of the build options remain same as mentioned above in this document.
+
+## To build openwrt with all userspace and kernelspace packages:
+
+For CA8210:
+
+    $ make openwrt P=creator-platform-all-cascoda.config V=s
+
+For CC2520:
+
+    $ make openwrt P=creator-platform-all.config V=s
+
+
