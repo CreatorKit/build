@@ -28,7 +28,7 @@ else
 	if test $(findstring P=,$(MAKEFLAGS)) && test -f $P; then \
 		cat $P > ../dist/openwrt/.config; \
 	else \
-		cat creator-kit.config > ../dist/openwrt/.config; \
+		cat creator-kit-0.config > ../dist/openwrt/.config; \
 	fi
 endif
 	$(MAKE) -C ../dist/openwrt defconfig
@@ -47,8 +47,14 @@ build_openwrt: openwrt/.config openwrt/version
 # Building Contiki apps
 .PHONY: build_contiki
 build_contiki:
-	$(MAKE) -C ../packages/led-actuator TARGET=mikro-e
-	$(MAKE) -C ../packages/button-sensor TARGET=mikro-e
+ifneq (_,_$(findstring cascoda,$P))
+	cd ../constrained-os/contiki;git submodule init dev/ca8210;git submodule update
+	$(MAKE) -C ../packages/led-actuator TARGET=mikro-e USE_CA8210=1
+	$(MAKE) -C ../packages/button-sensor TARGET=mikro-e USE_CA8210=1
+else
+	$(MAKE) -C ../packages/led-actuator TARGET=mikro-e USE_CC2520=1
+	$(MAKE) -C ../packages/button-sensor TARGET=mikro-e USE_CC2520=1
+endif
 
 # Copy files to build/output/
 copy_contiki:
