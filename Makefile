@@ -21,15 +21,11 @@ openwrt/feeds.conf:
 
 
 openwrt/.config: openwrt/feeds.conf
-ifeq ($(build-all),1)
-	cat creator-kit-all.config > ../dist/openwrt/.config
-	cp config-4.1-all ../dist/openwrt/target/linux/pistachio/config-4.1
-else
 	if test $(findstring P=,$(MAKEFLAGS)) && test -f $P; then \
 		cat $P > ../dist/openwrt/.config; \
-	else \
-		cat creator-kit.config > ../dist/openwrt/.config; \
 	fi
+ifneq (_,_$(findstring all,$P))
+	cp config-4.1-all ../dist/openwrt/target/linux/pistachio/config-4.1
 endif
 	$(MAKE) -C ../dist/openwrt defconfig
 
@@ -38,17 +34,23 @@ openwrt/version:
 
 .PHONY: build_openwrt
 build_openwrt: openwrt/.config openwrt/version
-	if test $(findstring build-all=,$(MAKEFLAGS)); then \
-		$(MAKE) $(SUBMAKEFLAGS) -C ../dist/openwrt IGNORE_ERRORS=m -j$(J); \
-	else \
-		$(MAKE) $(SUBMAKEFLAGS) -C ../dist/openwrt -j$(J);\
-	fi;
+ifneq (_,_$(findstring all,$P))
+	$(MAKE) $(SUBMAKEFLAGS) -C ../dist/openwrt IGNORE_ERRORS=m -j$(J)
+else
+	$(MAKE) $(SUBMAKEFLAGS) -C ../dist/openwrt -j$(J)
+endif
 
 # Building Contiki apps
 .PHONY: build_contiki
 build_contiki:
-	$(MAKE) -C ../packages/led-actuator TARGET=mikro-e
-	$(MAKE) -C ../packages/button-sensor TARGET=mikro-e
+ifneq (_,_$(findstring cascoda,$P))
+	cd ../constrained-os/contiki;git submodule init dev/ca8210;git submodule update
+	$(MAKE) -C ../packages/led-actuator TARGET=mikro-e USE_CA8210=1
+	$(MAKE) -C ../packages/button-sensor TARGET=mikro-e USE_CA8210=1
+else
+	$(MAKE) -C ../packages/led-actuator TARGET=mikro-e USE_CC2520=1
+	$(MAKE) -C ../packages/button-sensor TARGET=mikro-e USE_CC2520=1
+endif
 
 # Copy files to build/output/
 copy_contiki:
