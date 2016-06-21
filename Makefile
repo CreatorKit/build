@@ -21,15 +21,11 @@ openwrt/feeds.conf:
 
 
 openwrt/.config: openwrt/feeds.conf
-ifeq ($(build-all),1)
-	cat creator-kit-all.config > ../dist/openwrt/.config
-	cp config-4.1-all ../dist/openwrt/target/linux/pistachio/config-4.1
-else
 	if test $(findstring P=,$(MAKEFLAGS)) && test -f $P; then \
 		cat $P > ../dist/openwrt/.config; \
-	else \
-		cat creator-kit-0.config > ../dist/openwrt/.config; \
 	fi
+ifneq (_,_$(findstring all,$P))
+	cp config-4.1-all ../dist/openwrt/target/linux/pistachio/config-4.1
 endif
 	$(MAKE) -C ../dist/openwrt defconfig
 
@@ -38,11 +34,11 @@ openwrt/version:
 
 .PHONY: build_openwrt
 build_openwrt: openwrt/.config openwrt/version
-	if test $(findstring build-all=,$(MAKEFLAGS)); then \
-		$(MAKE) $(SUBMAKEFLAGS) -C ../dist/openwrt IGNORE_ERRORS=m -j$(J); \
-	else \
-		$(MAKE) $(SUBMAKEFLAGS) -C ../dist/openwrt -j$(J);\
-	fi;
+ifneq (_,_$(findstring all,$P))
+	$(MAKE) $(SUBMAKEFLAGS) -C ../dist/openwrt IGNORE_ERRORS=m -j$(J)
+else
+	$(MAKE) $(SUBMAKEFLAGS) -C ../dist/openwrt -j$(J)
+endif
 
 # Building Contiki apps
 .PHONY: build_contiki
