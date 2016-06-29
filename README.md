@@ -88,10 +88,8 @@ Linux and Contiki based applications can be cleaned by :-
 
 We are maintaining different pre-defined configurations in "config" files.
 
-    creator-kit-0.config - CreatorKit project0 related config for CC2520 based platforms.
     creator-kit-1.config - CreatorKit project1 related config for CC2520 based platforms.
     creator-platform-all.config - Basic Creator Platform profile enabling all the userspace and kernel space packages suitable for CC2520 based platforms.
-    creator-kit-0-cascoda.config - CreatorKit project0 related config for Cascoda CA8210 based platforms.
     creator-kit-1.config - CreatorKit project0 related config for CC2520 based platforms.
     creator-platform-all-cascoda.config - Basic Creator Platform profile enabling all the userspace and kernel space packages suitable for Cascoda CA8210 based platforms.
 
