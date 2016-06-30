@@ -15,7 +15,7 @@ openwrt/feeds.conf:
 	cd ../dist/openwrt; \
 	cp ../../build/feeds.conf .; \
 	./scripts/feeds update -a; \
-	./scripts/feeds install -a; \
+	./scripts/feeds install -a;
 ifneq (_,_$(findstring all,$P))
 	cd feeds/packages; patch -p1 < ../../../../build/0001-glib2-make-libiconv-dependent-on-ICONV_FULL-variable.patch; \
 	patch -p1 < ../../../../build/0001-node-host-turn-off-verbose.patch;
