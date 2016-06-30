@@ -1,4 +1,10 @@
 J?=1
+DIR__BUILD:=$(PWD)
+DIR__CKT:=$(DIR__BUILD)/..
+DIR__OPENWRT:=$(DIR__BUILD)/../dist/openwrt
+DIR__OPENWRT_FEEDS:=$(DIR__BUILD)/../dist/openwrt-feeds
+DIR__OPENWRT_CKT_FEEDS:=$(DIR__BUILD)/../dist/openwrt-ckt-feeds
+DIR__CONTIKI:=$(DIR__BUILD)/../constrained-os/contiki
 all: openwrt contiki
 	echo "All Done!"
 
@@ -11,77 +17,83 @@ openwrt: build_openwrt copy_openwrt
 clean: clean_openwrt clean_feeds clean_contiki clean_binaries
 
 # Building OpenWRT
-openwrt/feeds.conf:
-	cd ../dist/openwrt; \
-	cp ../../build/feeds.conf .; \
+.PHONY: openwrt/feeds.conf
+openwrt/feeds.conf: $(DIR__OPENWRT)/feeds.conf
+
+$(DIR__OPENWRT)/feeds.conf:
+	cd $(DIR__OPENWRT); \
+	cp $(DIR__BUILD)/feeds.conf .; \
 	./scripts/feeds update -a; \
-	./scripts/feeds install -a; \
+	./scripts/feeds install -a;
 ifneq (_,_$(findstring all,$P))
-	cd feeds/packages; patch -p1 < ../../../../build/0001-glib2-make-libiconv-dependent-on-ICONV_FULL-variable.patch; \
-	patch -p1 < ../../../../build/0001-node-host-turn-off-verbose.patch;
+	cd $(DIR__OPENWRT)/feeds/packages; patch -p1 < $(DIR__BUILD)/0001-glib2-make-libiconv-dependent-on-ICONV_FULL-variable.patch; \
+	patch -p1 < $(DIR__BUILD)/0001-node-host-turn-off-verbose.patch;
 endif
 
+.PHONY: openwrt/.config
+openwrt/.config: $(DIR__OPENWRT)/.config
 
-openwrt/.config: openwrt/feeds.conf
+$(DIR__OPENWRT)/.config: $(DIR__OPENWRT)/feeds.conf
 	if test $(findstring P=,$(MAKEFLAGS)) && test -f $P; then \
-		cat $P > ../dist/openwrt/.config; \
+		cat $P > $(DIR__OPENWRT)/.config; \
+	else \
+		cat creator-kit-1.config > $(DIR__OPENWRT)/.config; \
 	fi
 ifneq (_,_$(findstring all,$P))
-	cp config-4.1-all ../dist/openwrt/target/linux/pistachio/config-4.1
+	cp config-4.1-all $(DIR__OPENWRT)/target/linux/pistachio/config-4.1
 endif
-	$(MAKE) -C ../dist/openwrt defconfig
+	$(MAKE) -C $(DIR__OPENWRT) defconfig
 
-openwrt/version:
-	./getver.sh ../dist/openwrt > ../dist/openwrt/version
+.PHONY: openwrt/version
+openwrt/version: $(DIR__OPENWRT)/version
+
+$(DIR__OPENWRT)/version:
+	./getver.sh  $(DIR__OPENWRT) > $(DIR__OPENWRT)/version
 
 .PHONY: build_openwrt
 build_openwrt: openwrt/.config openwrt/version
 ifneq (_,_$(findstring all,$P))
-	$(MAKE) $(SUBMAKEFLAGS) -C ../dist/openwrt IGNORE_ERRORS=m -j$(J)
+	$(MAKE) $(SUBMAKEFLAGS) -C $(DIR__OPENWRT) IGNORE_ERRORS=m -j$(J)
 else
-	$(MAKE) $(SUBMAKEFLAGS) -C ../dist/openwrt -j$(J)
+	$(MAKE) $(SUBMAKEFLAGS) -C $(DIR__OPENWRT) -j$(J)
 endif
 
 # Building Contiki apps
 .PHONY: build_contiki
 build_contiki:
 ifneq (_,_$(findstring cascoda,$P))
-	cd ../constrained-os/contiki;git submodule init dev/ca8210;git submodule update
-	$(MAKE) -C ../packages/led-actuator TARGET=mikro-e USE_CA8210=1
-	$(MAKE) -C ../packages/button-sensor TARGET=mikro-e USE_CA8210=1
+	cd $(DIR__CONTIKI);git submodule init dev/ca8210;git submodule update
+	$(MAKE) -C $(DIR__CKT)/packages/button-sensor TARGET=mikro-e USE_CA8210=1
 else
-	$(MAKE) -C ../packages/led-actuator TARGET=mikro-e USE_CC2520=1
-	$(MAKE) -C ../packages/button-sensor TARGET=mikro-e USE_CC2520=1
+	$(MAKE) -C $(DIR__CKT)/packages/button-sensor TARGET=mikro-e USE_CC2520=1
 endif
 
 # Copy files to build/output/
 copy_contiki:
-	mkdir -p output/contiki
-	cp ../packages/led-actuator/lwm2m-client-led-actuator.hex output/contiki/
-	cp ../packages/button-sensor/lwm2m-client-button-sensor.hex output/contiki/
+	mkdir -p $(DIR__BUILD)/output/contiki
+	cp $(DIR__CKT)/packages/button-sensor/lwm2m-client-button-sensor.hex $(DIR__BUILD)/output/contiki/
 
 copy_openwrt:
-	mkdir -p output/openwrt
-	zip -r output/openwrt/packages.zip ../dist/openwrt/bin/pistachio/packages/*
-	find ../dist/openwrt/bin/pistachio/ -maxdepth 1 -type f -exec cp {} output/openwrt/ \;
+	mkdir -p $(DIR__BUILD)/output/openwrt
+	zip -r $(DIR__BUILD)/output/openwrt/packages.zip $(DIR__OPENWRT)/bin/pistachio/packages/*
+	find $(DIR__OPENWRT)/bin/pistachio/ -maxdepth 1 -type f -exec cp {} $(DIR__BUILD)/output/openwrt/ \;
 
 # Clean OpenWRT
 # Deletes contents of the directories /bin and /build_dir
 .PHONY: clean_openwrt
 clean_openwrt:
-	$(MAKE) -C ../dist/openwrt clean
+	$(MAKE) -C $(DIR__OPENWRT) clean
 
 # Clean Contiki
 .PHONY: clean_contiki
 clean_contiki:
-	$(MAKE) -C ../packages/led-actuator TARGET=mikro-e clean
-	$(MAKE) -C ../packages/button-sensor TARGET=mikro-e clean
+	$(MAKE) -C $(DIR__CKT)/packages/button-sensor TARGET=mikro-e clean
 
 .PHONY: clean_feeds
 clean_feeds:
-	cd ../dist/openwrt; \
+	cd $(DIR__OPENWRT); \
 	rm -rf .config feeds.conf tmp/ feeds;
 
 .PHONY: clean_binaries
 clean_binaries:
-	rm -rf output/
+	rm -rf $(DIR__BUILD)/output/
