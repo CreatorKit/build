@@ -74,8 +74,9 @@ copy_contiki:
 	cp $(DIR__CKT)/packages/button-sensor/lwm2m-client-button-sensor.hex $(DIR__BUILD)/output/contiki/
 
 copy_openwrt:
-	mkdir -p $(DIR__BUILD)/output/openwrt
-	zip -r $(DIR__BUILD)/output/openwrt/packages.zip $(DIR__OPENWRT)/bin/pistachio/packages/*
+	mkdir -p $(DIR__BUILD)/output/openwrt/packages
+	cp -rf $(DIR__OPENWRT)/bin/pistachio/packages/* $(DIR__BUILD)/output/openwrt/packages/
+	cd $(DIR__BUILD)/output/openwrt/;tar -cvzf packages.tar.gz packages
 	find $(DIR__OPENWRT)/bin/pistachio/ -maxdepth 1 -type f -exec cp {} $(DIR__BUILD)/output/openwrt/ \;
 
 # Clean OpenWRT
