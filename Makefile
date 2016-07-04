@@ -17,9 +17,6 @@ openwrt: build_openwrt copy_openwrt
 clean: clean_openwrt clean_feeds clean_contiki clean_binaries
 
 # Building OpenWRT
-.PHONY: openwrt/feeds.conf
-openwrt/feeds.conf: $(DIR__OPENWRT)/feeds.conf
-
 $(DIR__OPENWRT)/feeds.conf:
 	cd $(DIR__OPENWRT); \
 	cp $(DIR__BUILD)/feeds.conf .; \
@@ -29,9 +26,6 @@ ifneq (_,_$(findstring all,$P))
 	cd $(DIR__OPENWRT)/feeds/packages; patch -p1 < $(DIR__BUILD)/0001-glib2-make-libiconv-dependent-on-ICONV_FULL-variable.patch; \
 	patch -p1 < $(DIR__BUILD)/0001-node-host-turn-off-verbose.patch;
 endif
-
-.PHONY: openwrt/.config
-openwrt/.config: $(DIR__OPENWRT)/.config
 
 $(DIR__OPENWRT)/.config: $(DIR__OPENWRT)/feeds.conf
 	if test $(findstring P=,$(MAKEFLAGS)) && test -f $P; then \
@@ -44,14 +38,11 @@ ifneq (_,_$(findstring all,$P))
 endif
 	$(MAKE) -C $(DIR__OPENWRT) defconfig
 
-.PHONY: openwrt/version
-openwrt/version: $(DIR__OPENWRT)/version
-
 $(DIR__OPENWRT)/version:
 	./getver.sh  $(DIR__OPENWRT) > $(DIR__OPENWRT)/version
 
 .PHONY: build_openwrt
-build_openwrt: openwrt/.config openwrt/version
+build_openwrt: $(DIR__OPENWRT)/.config $(DIR__OPENWRT)/version
 ifneq (_,_$(findstring all,$P))
 	$(MAKE) $(SUBMAKEFLAGS) -C $(DIR__OPENWRT) IGNORE_ERRORS=m -j$(J)
 else
@@ -74,8 +65,9 @@ copy_contiki:
 	cp $(DIR__CKT)/packages/button-sensor/lwm2m-client-button-sensor.hex $(DIR__BUILD)/output/contiki/
 
 copy_openwrt:
-	mkdir -p $(DIR__BUILD)/output/openwrt
-	zip -r $(DIR__BUILD)/output/openwrt/packages.zip $(DIR__OPENWRT)/bin/pistachio/packages/*
+	mkdir -p $(DIR__BUILD)/output/openwrt/packages
+	cp -rf $(DIR__OPENWRT)/bin/pistachio/packages/* $(DIR__BUILD)/output/openwrt/packages/
+	cd $(DIR__BUILD)/output/openwrt/;tar -cvzf packages.tar.gz packages
 	find $(DIR__OPENWRT)/bin/pistachio/ -maxdepth 1 -type f -exec cp {} $(DIR__BUILD)/output/openwrt/ \;
 
 # Clean OpenWRT
