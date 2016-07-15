@@ -49,20 +49,26 @@ else
 	$(MAKE) $(SUBMAKEFLAGS) -C $(DIR__OPENWRT) -j$(J)
 endif
 
+get_kit_app:
+	@$(eval KIT_APP_NO=$(shell echo $P | tr -cd [:digit:]))
+
 # Building Contiki apps
 .PHONY: build_contiki
-build_contiki:
+build_contiki: get_kit_app
 ifneq (_,_$(findstring cascoda,$P))
-	cd $(DIR__CONTIKI);git submodule init dev/ca8210;git submodule update
-	$(MAKE) -C $(DIR__CKT)/packages/button-sensor TARGET=mikro-e USE_CA8210=1
+	@cd $(DIR__CONTIKI);git submodule init dev/ca8210;git submodule update
+	@if [ $(KIT_APP_NO) -eq "1" ]; then $(MAKE) -C $(DIR__CKT)/packages/button-sensor TARGET=mikro-e USE_CA8210=1; fi
+	@if [ $(KIT_APP_NO) -eq "2" ]; then $(MAKE) -C $(DIR__CKT)/packages/motion-sensor TARGET=mikro-e USE_CA8210=1; fi
 else
-	$(MAKE) -C $(DIR__CKT)/packages/button-sensor TARGET=mikro-e USE_CC2520=1
+	@if [ $(KIT_APP_NO) -eq "1" ]; then $(MAKE) -C $(DIR__CKT)/packages/button-sensor TARGET=mikro-e USE_CC2520=1; fi
+	@if [ $(KIT_APP_NO) -eq "2" ]; then $(MAKE) -C $(DIR__CKT)/packages/motion-sensor TARGET=mikro-e USE_CC2520=1; fi
 endif
 
 # Copy files to build/output/
-copy_contiki:
+copy_contiki: get_kit_app
 	mkdir -p $(DIR__BUILD)/output/contiki
-	cp $(DIR__CKT)/packages/button-sensor/lwm2m-client-button-sensor.hex $(DIR__BUILD)/output/contiki/
+	@if [ $(KIT_APP_NO) -eq "1" ]; then cp $(DIR__CKT)/packages/button-sensor/lwm2m-client-button-sensor.hex $(DIR__BUILD)/output/contiki/; fi
+	@if [ $(KIT_APP_NO) -eq "2" ]; then cp $(DIR__CKT)/packages/motion-sensor/lwm2m-client-motion-sensor.hex $(DIR__BUILD)/output/contiki/; fi
 
 copy_openwrt:
 	mkdir -p $(DIR__BUILD)/output/openwrt/packages
@@ -76,10 +82,11 @@ copy_openwrt:
 clean_openwrt:
 	$(MAKE) -C $(DIR__OPENWRT) clean
 
-# Clean Contiki
+#Clean Contiki
 .PHONY: clean_contiki
-clean_contiki:
-	$(MAKE) -C $(DIR__CKT)/packages/button-sensor TARGET=mikro-e clean
+clean_contiki: get_kit_app
+	@if [ $(KIT_APP_NO) -eq "1" ]; then $(MAKE) -C $(DIR__CKT)/packages/button-sensor TARGET=mikro-e clean; fi
+	@if [ $(KIT_APP_NO) -eq "2" ]; then $(MAKE) -C $(DIR__CKT)/packages/motion-sensor TARGET=mikro-e clean; fi
 
 .PHONY: clean_feeds
 clean_feeds:
