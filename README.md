@@ -1,8 +1,9 @@
 ##  Creator-Kit Top level Build system
 
-Creator-Kit requires multiple repositories for building, which are scattered across two GitHub organizations namely FlowM2M and CreatorKit.
+Creator-Kit requires multiple repositories for building, which are scattered across two GitHub organizations namely CreatorKit, Creatordev, FlowM2M and Cascoda.
 
-### Steps for building CreatorKit project are as follows :-
+### Steps for building CreatorKit projects are as follows :-
+
 Create a directory to keep project repositories, and run following commands :-
 
     $ mkdir creatorkit
@@ -20,7 +21,7 @@ Update ~/.bashrc to add repo path in linux path permanently :-
 
     export PATH=$PATH:~/bin/
 
-Now required repositories are cloned inside the project directory creatorkit.
+After repo sync is complete, required repositories are cloned inside the project directory creatorkit.
 
 Enter into build repository and start building :-
 
@@ -64,7 +65,7 @@ Additional arguments could also be passed while building OpenWrt for logging mor
 
 4. For building OpenWrt's different projects, different configs needs to be passed.
 
-        $ make openwrt P=creator-kit-1.config
+        $ make openwrt P=creator-kit-1-cascoda.config
 
 For cleaning linux based applications :-
 
@@ -82,7 +83,7 @@ Linux and Contiki based applications can be cleaned by :-
 
 ## Pre-defined configurations:
 
-We are maintaining different pre-defined configurations in "config" files.
+We are maintaining different pre-defined configurations in "config" files for building different CreatorKit projects.
 
     creator-kit-1.config - CreatorKit project1 related config for CC2520 based platforms.
     creator-kit-2.config - CreatorKit project2 related config for CC2520 based platforms.
@@ -91,9 +92,10 @@ We are maintaining different pre-defined configurations in "config" files.
     creator-platform-all.config - Basic Creator Platform profile enabling all the userspace and kernel space packages suitable for CC2520 based platforms.
     creator-platform-all-cascoda.config - Basic Creator Platform profile enabling all the userspace and kernel space packages suitable for Cascoda CA8210 based platforms.
 
-## To build for cascoda CA8210 platform:
+## To build for Cascoda CA8210 platform:
 
-Make sure you use "cascoda" related configs, else it will build contiki for CC2520 by default.
+_Note :- By default, CreatorKit project1 is built for Cascoda CA8210 platform if no config has been specified using P= option._
+
 Contiki
 
     $ make contiki P=creator-kit-1-cascoda.config
@@ -117,5 +119,3 @@ For CA8210:
 For CC2520:
 
     $ make openwrt P=creator-platform-all.config V=s
-
-
