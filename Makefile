@@ -31,7 +31,7 @@ $(DIR__OPENWRT)/.config: $(DIR__OPENWRT)/feeds.conf
 	if test $(findstring P=,$(MAKEFLAGS)) && test -f $P; then \
 		cat $P > $(DIR__OPENWRT)/.config; \
 	else \
-		cat creator-kit-1.config > $(DIR__OPENWRT)/.config; \
+		cat creator-kit-1-cascoda.config > $(DIR__OPENWRT)/.config; \
 	fi
 ifneq (_,_$(findstring all,$P))
 	cp config-4.1-all $(DIR__OPENWRT)/target/linux/pistachio/config-4.1
