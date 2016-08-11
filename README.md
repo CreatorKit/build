@@ -125,3 +125,17 @@ For CA8210:
 For CC2520:
 
     $ make openwrt P=creator-platform-all.config V=s
+
+
+## Contiki specific build options:
+
+Contiki
+
+    $ make contiki P=creator-kit-1-cascoda.config SER=1 CH=26 ID=0xabcd
+
+
+Here SER means USE_SERIAL_PADS i.e. UART2 for serial console
+You can pass channel number in CH and pan_id in ID option.
+Default values of CH , ID, SER are 26, 0xabcd, 0 respectively.
+
+
