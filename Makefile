@@ -1,4 +1,7 @@
 J?=1
+CH?=26
+ID?=0xabcd
+SER?=0
 DIR__BUILD:=$(PWD)
 DIR__CKT:=$(DIR__BUILD)/..
 DIR__OPENWRT:=$(DIR__BUILD)/../dist/openwrt
@@ -31,7 +34,7 @@ $(DIR__OPENWRT)/.config: $(DIR__OPENWRT)/feeds.conf
 	if test $(findstring P=,$(MAKEFLAGS)) && test -f $P; then \
 		cat $P > $(DIR__OPENWRT)/.config; \
 	else \
-		cat creator-kit-1.config > $(DIR__OPENWRT)/.config; \
+		cat creator-kit-1-cascoda.config > $(DIR__OPENWRT)/.config; \
 	fi
 ifneq (_,_$(findstring all,$P))
 	cp config-4.1-all $(DIR__OPENWRT)/target/linux/pistachio/config-4.1
@@ -57,11 +60,11 @@ get_kit_app:
 build_contiki: get_kit_app
 ifneq (_,_$(findstring cascoda,$P))
 	@cd $(DIR__CONTIKI);git submodule init dev/ca8210;git submodule update
-	@if [ $(KIT_APP_NO) -eq "1" ]; then $(MAKE) -C $(DIR__CKT)/packages/button-sensor TARGET=mikro-e USE_CA8210=1; fi
-	@if [ $(KIT_APP_NO) -eq "2" ]; then $(MAKE) -C $(DIR__CKT)/packages/motion-sensor TARGET=mikro-e USE_CA8210=1; fi
+	@if [ $(KIT_APP_NO) -eq "1" ]; then $(MAKE) -C $(DIR__CKT)/packages/button-sensor TARGET=mikro-e USE_CA8210=1 USE_SERIAL_PADS=$(SER) CHANNEL=$(CH) PAN_ID=$(ID); fi
+	@if [ $(KIT_APP_NO) -eq "2" ]; then $(MAKE) -C $(DIR__CKT)/packages/motion-sensor TARGET=mikro-e USE_CA8210=1 USE_SERIAL_PADS=$(SER) CHANNEL=$(CH) PAN_ID=$(ID); fi
 else
-	@if [ $(KIT_APP_NO) -eq "1" ]; then $(MAKE) -C $(DIR__CKT)/packages/button-sensor TARGET=mikro-e USE_CC2520=1; fi
-	@if [ $(KIT_APP_NO) -eq "2" ]; then $(MAKE) -C $(DIR__CKT)/packages/motion-sensor TARGET=mikro-e USE_CC2520=1; fi
+	@if [ $(KIT_APP_NO) -eq "1" ]; then $(MAKE) -C $(DIR__CKT)/packages/button-sensor TARGET=mikro-e USE_CC2520=1 USE_SERIAL_PADS=$(SER) CHANNEL=$(CH) PAN_ID=$(ID); fi
+	@if [ $(KIT_APP_NO) -eq "2" ]; then $(MAKE) -C $(DIR__CKT)/packages/motion-sensor TARGET=mikro-e USE_CC2520=1 USE_SERIAL_PADS=$(SER) CHANNEL=$(CH) PAN_ID=$(ID); fi
 endif
 
 # Copy files to build/output/
