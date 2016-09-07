@@ -134,4 +134,11 @@ Here SER means USE_SERIAL_PADS i.e. UART2 for serial console
 You can pass channel number in CH and pan_id in ID option.
 Default values of CH , ID, SER are 26, 0xabcd, 0 respectively.
 
+----
+
+## Contributing
+
+We welcome all contributions to this project and we give credit where it's due. Anything from enhancing functionality to improving documentation and bug reporting - it's all good.
+
+For more details about the Contributor's guidelines, refer to the [contributor guide](https://github.com/CreatorKit/creator-docs/blob/master/ContributorGuide.md).
 
