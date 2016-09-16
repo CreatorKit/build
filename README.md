@@ -95,8 +95,6 @@ We are maintaining different pre-defined configurations in "config" files for bu
     creator-kit-1-cascoda.config - CreatorKit project1 related config for CA8210 based platforms.
     creator-kit-2-cascoda.config - CreatorKit project2 related config for CA8210 based platforms.
     creator-kit-3-cascoda.config - CreatorKit project3 related config for CA8210 based platforms.
-    creator-platform-all.config - Basic Creator Platform profile enabling all the userspace and kernel space packages suitable for CC2520 based platforms.
-    creator-platform-all-cascoda.config - Basic Creator Platform profile enabling all the userspace and kernel space packages suitable for Cascoda CA8210 based platforms.
 
 ## To build for Cascoda CA8210 platform:
 
@@ -115,17 +113,6 @@ Whole OpenWrt and Contiki based applications.
     $ make P=creator-kit-1-cascoda.config
 
 Rest of the build options remain same as mentioned above in this document.
-
-## To build openwrt with all userspace and kernelspace packages:
-
-For CA8210:
-
-    $ make openwrt P=creator-platform-all-cascoda.config V=s
-
-For CC2520:
-
-    $ make openwrt P=creator-platform-all.config V=s
-
 
 ## Contiki specific build options:
 

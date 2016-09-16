@@ -5,8 +5,6 @@ SER?=0
 DIR__BUILD:=$(PWD)
 DIR__CKT:=$(DIR__BUILD)/..
 DIR__OPENWRT:=$(DIR__BUILD)/../dist/openwrt
-DIR__OPENWRT_FEEDS:=$(DIR__BUILD)/../dist/openwrt-feeds
-DIR__OPENWRT_CKT_FEEDS:=$(DIR__BUILD)/../dist/openwrt-ckt-feeds
 DIR__CONTIKI:=$(DIR__BUILD)/../constrained-os/contiki
 all: openwrt contiki
 	echo "All Done!"
@@ -25,10 +23,6 @@ $(DIR__OPENWRT)/feeds.conf:
 	cp $(DIR__BUILD)/feeds.conf .; \
 	./scripts/feeds update -a; \
 	./scripts/feeds install -a;
-ifneq (_,_$(findstring all,$P))
-	cd $(DIR__OPENWRT)/feeds/packages; patch -p1 < $(DIR__BUILD)/0001-glib2-make-libiconv-dependent-on-ICONV_FULL-variable.patch; \
-	patch -p1 < $(DIR__BUILD)/0001-node-host-turn-off-verbose.patch;
-endif
 
 $(DIR__OPENWRT)/.config: $(DIR__OPENWRT)/feeds.conf
 	if test $(findstring P=,$(MAKEFLAGS)) && test -f $P; then \
@@ -36,9 +30,6 @@ $(DIR__OPENWRT)/.config: $(DIR__OPENWRT)/feeds.conf
 	else \
 		cat creator-kit-1-cascoda.config > $(DIR__OPENWRT)/.config; \
 	fi
-ifneq (_,_$(findstring all,$P))
-	cp config-4.1-all $(DIR__OPENWRT)/target/linux/pistachio/config-4.1
-endif
 	$(MAKE) -C $(DIR__OPENWRT) defconfig
 
 $(DIR__OPENWRT)/version:
@@ -46,11 +37,7 @@ $(DIR__OPENWRT)/version:
 
 .PHONY: build_openwrt
 build_openwrt: $(DIR__OPENWRT)/.config $(DIR__OPENWRT)/version
-ifneq (_,_$(findstring all,$P))
-	$(MAKE) $(SUBMAKEFLAGS) -C $(DIR__OPENWRT) IGNORE_ERRORS=m -j$(J)
-else
 	$(MAKE) $(SUBMAKEFLAGS) -C $(DIR__OPENWRT) -j$(J)
-endif
 
 get_kit_app:
 	@$(eval KIT_APP_NO=$(shell echo $P | tr -cd [:digit:]))
