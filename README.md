@@ -1,87 +1,106 @@
 ##  Creator-Kit Top level Build system
 
-Creator-Kit requires multiple repositories for building, which are scattered across two GitHub organizations namely CreatorKit, Creatordev, FlowM2M and Cascoda.
+In order to build the IoT Kit projects, we need to collect source code from multiple repositories. The following process will bring these repositories together into a single build environment. The individual repositories used are from these Github organisations:
 
-### Steps for building CreatorKit projects are as follows :-
+* CreatorKit
+* CreatorDev
+* FlowM2M
+* Cascoda
 
-Create a directory to keep project repositories, and run following commands :-
+### Building Creator Kit Projects
 
-    $ mkdir creatorkit
-    $ cd creatorkit
-    $ repo init -u https://github.com/CreatorKit/manifest.git -b dev
-    $ repo sync
+#### 1. Install repo tool
 
-_Note :- repo is a tool which should be present on your system. If not then follow this :-_
+To pull together multiple repos, you will need to install the "repo" tool.
+
+On Ubuntu 16.04:
+
+    $ sudo apt-get install repo
+
+On Ubuntu 14.04:
 
     $ mkdir -p ~/bin
     $ curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
     $ chmod a+x ~/bin/repo
 
-Update ~/.bashrc to add repo path in linux path permanently :-
+Update ~/.bashrc to add repo path in linux path permanently:
 
     export PATH=$PATH:~/bin/
 
-After repo sync is complete, required repositories are cloned inside the project directory creatorkit.
+#### 2. Sync with the upstream repositories
 
-Enter into build repository and start building :-
+Create a new directory to keep project repositories, and run the following commands within the directory:
+
+    $ repo init -u https://github.com/CreatorKit/manifest.git
+    $ repo sync
+
+After repo sync is complete, the required repositories are cloned inside the project directory.
+
+#### 3. Build Projects
+
+After the sync is complete you will find a 'build' folder. This folder allows you to build OpenWrt, Contiki and IoT Kit Projects from one directory.
 
     $ cd build
 
-There are multiple options for building things :-
+#### 3a. Install Dependencies
 
-Linux based applications using OpenWrt can be built by :-
+Before building you need to install dependencies.
+
+**OpenWrt build dependencies**
+
+    $ sudo apt-get install libncurses5-dev libncursesw5-dev zlib1g-dev libssl-dev gawk subversion device-tree-compiler
+
+**Contiki build dependencies**
+
+For 64-bit Ubuntu, 32-bit runtime libraries must be installed before the XC32 compiler can be run:
+
+    $ sudo apt-get install libc6:i386
+
+Download and install the XC32 Linux compiler (v1.34) from [here](http://ww1.microchip.com/downloads/en/DeviceDoc/xc32-v1.34-full-install-linux-installer.run).
+
+#### 3b. Build
+
+You have many different options you can choose when building from the build directory.
+
+To build OpenWrt:
 
     $ make openwrt
 
-OpenWrt binaries can be found at :-
+OpenWrt binaries can then be found at:
 
     creatorkit/build/output/openwrt/
 
-Contiki based applications can be built by :-
+Contiki based applications can be built using:
 
     $ make contiki
 
-Contiki based application binaries can be found at :-
+Contiki based application binaries can then be found at:
 
     creatorkit/build/output/contiki/
 
-Linux and Contiki based applications can be built by :-
+Linux and Contiki based applications can be built using:
 
     $ make
 
-Additional arguments could also be passed while building OpenWrt for logging more information, or building it in parallel threads. e.g.
+To build the IoT Kit projects, append the config file name to the make command:
 
-1. For logging all information
+    $ make P=creator-kit-1-cascoda.config
 
-        $ make openwrt V=s
-
-2. For logging just errors/warnings
-
-        $ make openwrt V=w
-
-3. For building OpenWrt in parallel threads
-
-        $ make openwrt J=20
-
-4. For building OpenWrt's different projects, different configs needs to be passed.
-
-        $ make openwrt P=creator-kit-1-cascoda.config
-
-For cleaning linux based applications :-
+For cleaning linux based applications:
 
     $ make clean_openwrt
 
 _Note :- This will also clean the feeds._
 
-For cleaning Contiki based applications :-
+For cleaning Contiki based applications:
 
     $ make clean_contiki
 
-Linux and Contiki based applications can be cleaned by :-
+Linux and Contiki based applications can be cleaned by:
 
     $ make clean
 
-## Pre-defined configurations:
+## Pre-defined configurations
 
 We are maintaining different pre-defined configurations in "config" files for building different CreatorKit projects.
 
@@ -92,21 +111,21 @@ We are maintaining different pre-defined configurations in "config" files for bu
     creator-kit-2-cascoda.config - CreatorKit project2 related config for CA8210 based platforms.
     creator-kit-3-cascoda.config - CreatorKit project3 related config for CA8210 based platforms.
 
-## To build for Cascoda CA8210 platform:
+## To build for TI CC2520 platform
 
-_Note :- By default, CreatorKit project1 is built for Cascoda CA8210 platform if no config has been specified using P= option._
+_Note :- By default, CreatorKit project1 is built for Cascoda CA8210 platform if no config has been specified using P= option. Always assume your 6LoWPAN Clicker is a Cascoda CA8210 board, unless you have specifically been notified otherwise._
 
 Contiki
 
-    $ make contiki P=creator-kit-1-cascoda.config
+    $ make contiki P=creator-kit-1.config
 
 OpenWrt
 
-    $ make openwrt P=creator-kit-1-cascoda.config
+    $ make openwrt P=creator-kit-1.config
 
 Whole OpenWrt and Contiki based applications.
 
-    $ make P=creator-kit-1-cascoda.config
+    $ make P=creator-kit-1.config
 
 Rest of the build options remain same as mentioned above in this document.
 
@@ -128,4 +147,3 @@ Default values of CH , ID, SER are 26, 0xabcd, 0 respectively.
 We welcome all contributions to this project and we give credit where it's due. Anything from enhancing functionality to improving documentation and bug reporting - it's all good.
 
 For more details about the Contributor's guidelines, refer to the [contributor guide](https://github.com/CreatorKit/creator-docs/blob/master/ContributorGuide.md).
-
