@@ -3,7 +3,7 @@
 In order to build the IoT Kit projects, we need to collect source code from multiple repositories. The following process will bring these repositories together into a single build environment. The individual repositories used are from these Github organisations:
 
 * CreatorKit
-* Creatordev
+* CreatorDev
 * FlowM2M
 * Cascoda
 
@@ -35,10 +35,6 @@ Create a new directory to keep project repositories, and run the following comma
     $ repo sync
 
 After repo sync is complete, the required repositories are cloned inside the project directory.
-
-Optional: If you wish to build from a tagged release, add a tag name to the repo init command as follows:
-
-     $ repo init -u https://github.com/CreatorKit/manifest.git -b 0.9.5
 
 #### 3. Build Projects
 
