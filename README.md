@@ -60,31 +60,13 @@ Download and install the XC32 Linux compiler (v1.34) from [here](http://ww1.micr
 
 #### 3b. Build
 
-You have many different options you can choose when building from the build directory.
-
-To build OpenWrt:
-
-    $ make openwrt
-
-OpenWrt binaries can then be found at:
-
-    creatorkit/build/output/openwrt/
-
-Contiki based applications can be built using:
-
-    $ make contiki
-
-Contiki based application binaries can then be found at:
-
-    creatorkit/build/output/contiki/
-
-Linux and Contiki based applications can be built using:
-
-    $ make
+All make commands need to be run within the build directory.
 
 To build the IoT Kit projects, append the config file name to the make command:
 
     $ make P=creator-kit-1-cascoda.config
+
+The resulting build will be in the build/output folder.
 
 For cleaning linux based applications:
 
